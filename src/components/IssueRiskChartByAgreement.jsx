@@ -18,6 +18,8 @@ import {
   MenuItem,
   Container,
   Typography,
+  Paper,
+  Box,
 } from "@mui/material";
 
 const IssueRiskChartByAgreement = () => {
@@ -28,13 +30,13 @@ const IssueRiskChartByAgreement = () => {
   useEffect(() => {
     ApiService.get("/agreements")
       .then((response) => {
-        setAgreements(response.data); // Tüm Agreement verilerini al
+        setAgreements(response.data);
       })
       .catch((error) => console.error("Error fetching agreements:", error));
 
     ApiService.get("/issues")
       .then((response) => {
-        setIssues(response.data); // Tüm Issue verilerini al
+        setIssues(response.data);
       })
       .catch((error) => console.error("Error fetching issues:", error));
   }, []);
@@ -43,7 +45,6 @@ const IssueRiskChartByAgreement = () => {
     setSelectedAgreement(event.target.value);
   };
 
-  // Seçilen Agreement ile ilgili Issue'ları filtreleme
   const filteredIssues = issues.filter(
     (issue) => issue.agreementId === selectedAgreement
   );
@@ -56,42 +57,46 @@ const IssueRiskChartByAgreement = () => {
 
   return (
     <Container>
-      <Typography variant="h4" gutterBottom>
-        Issue Risk Analysis by Agreement
-      </Typography>
-      <FormControl fullWidth margin="normal">
-        <InputLabel>Select Agreement</InputLabel>
-        <Select
-          value={selectedAgreement}
-          onChange={handleAgreementChange}
-          label="Select Agreement"
-        >
-          {agreements.map((agreement) => (
-            <MenuItem key={agreement.id} value={agreement.id}>
-              {agreement.name}
-            </MenuItem>
-          ))}
-        </Select>
-      </FormControl>
-      {selectedAgreement && (
-        <ResponsiveContainer width="100%" height={400}>
-          <BarChart data={filteredIssues}>
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="title" />
-            <YAxis />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="riskLevel">
-              {filteredIssues.map((issue, index) => (
-                <Cell
-                  key={`cell-${index}`}
-                  fill={getRiskLevelColor(issue.riskLevel)}
-                />
+      <Box my={4}>
+        <Typography variant="h4" gutterBottom>
+          Issue Risk Analysis by Agreement
+        </Typography>
+        <Paper elevation={3} style={{ padding: "16px" }}>
+          <FormControl fullWidth margin="normal">
+            <InputLabel>Select Agreement</InputLabel>
+            <Select
+              value={selectedAgreement}
+              onChange={handleAgreementChange}
+              label="Select Agreement"
+            >
+              {agreements.map((agreement) => (
+                <MenuItem key={agreement.id} value={agreement.id}>
+                  {agreement.name}
+                </MenuItem>
               ))}
-            </Bar>
-          </BarChart>
-        </ResponsiveContainer>
-      )}
+            </Select>
+          </FormControl>
+          {selectedAgreement && (
+            <ResponsiveContainer width="100%" height={400}>
+              <BarChart data={filteredIssues}>
+                <CartesianGrid strokeDasharray="3 3" />
+                <XAxis dataKey="title" />
+                <YAxis />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="riskLevel">
+                  {filteredIssues.map((issue, index) => (
+                    <Cell
+                      key={`cell-${index}`}
+                      fill={getRiskLevelColor(issue.riskLevel)}
+                    />
+                  ))}
+                </Bar>
+              </BarChart>
+            </ResponsiveContainer>
+          )}
+        </Paper>
+      </Box>
     </Container>
   );
 };

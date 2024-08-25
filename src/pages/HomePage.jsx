@@ -6,10 +6,7 @@ import IssueRiskChartByAgreement from "../components/IssueRiskChartByAgreement";
 
 const HomePage = () => {
   return (
-    <Container>
-      <Typography variant="h4" gutterBottom>
-        Issue Risk and Profit Analysis
-      </Typography>
+    <Container sx={{ marginTop: 4 }}>
       <IssueRiskChartByAgreement />
       <IssueChart />
       <ProfitChart />

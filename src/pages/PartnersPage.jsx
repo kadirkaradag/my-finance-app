@@ -6,6 +6,8 @@ import {
   List,
   ListItem,
   ListItemText,
+  Paper,
+  Box,
 } from "@mui/material";
 
 const PartnersPage = () => {
@@ -19,19 +21,23 @@ const PartnersPage = () => {
 
   return (
     <Container>
-      <Typography variant="h4" gutterBottom>
-        Partners
-      </Typography>
-      <List>
-        {partners.map((partner) => (
-          <ListItem key={partner.id}>
-            <ListItemText
-              primary={partner.name}
-              secondary={`Contact Info: ${partner.contactInfo}`}
-            />
-          </ListItem>
-        ))}
-      </List>
+      <Box my={4}>
+        <Typography variant="h4" gutterBottom>
+          Partners
+        </Typography>
+        <Paper elevation={3} style={{ padding: "16px" }}>
+          <List>
+            {partners.map((partner) => (
+              <ListItem key={partner.id} divider>
+                <ListItemText
+                  primary={partner.name}
+                  secondary={`Contact Info: ${partner.contactInfo}`}
+                />
+              </ListItem>
+            ))}
+          </List>
+        </Paper>
+      </Box>
     </Container>
   );
 };

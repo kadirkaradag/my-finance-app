@@ -7,12 +7,14 @@ import {
   ListItem,
   ListItemText,
   Button,
+  Paper,
+  Box,
 } from "@mui/material";
 import { Link as RouterLink } from "react-router-dom";
 
 const AgreementsPage = () => {
   const [agreements, setAgreements] = useState([]);
-  console.log("agreements", agreements);
+
   useEffect(() => {
     ApiService.get("/agreements")
       .then((response) => setAgreements(response.data))
@@ -21,45 +23,36 @@ const AgreementsPage = () => {
 
   return (
     <Container>
-      <Typography variant="h4" gutterBottom>
-        Agreements
-      </Typography>
-      <List>
-        {agreements.map((agreement) => (
-          <ListItem key={agreement.id}>
-            <ListItemText
-              primary={agreement.name}
-              secondary={
-                <>
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    color="textPrimary"
+      <Box my={4}>
+        <Typography variant="h4" gutterBottom>
+          Agreements
+        </Typography>
+        <Paper elevation={3} style={{ padding: "16px" }}>
+          <List>
+            {agreements.map((agreement) => (
+              <ListItem
+                key={agreement.id}
+                divider
+                secondaryAction={
+                  <Button
+                    variant="contained"
+                    color="primary"
+                    component={RouterLink}
+                    to={`/agreements/${agreement.id}`}
                   >
-                    Amount: {agreement.amount}
-                  </Typography>
-                  <br />
-                  <Typography
-                    component="span"
-                    variant="body2"
-                    color="textSecondary"
-                  >
-                    Cost: {agreement.cost}
-                  </Typography>
-                </>
-              }
-            />
-            <Button
-              variant="outlined"
-              color="primary"
-              component={RouterLink}
-              to={`/agreements/${agreement.id}`} // Doğru URL parametresi
-            >
-              View Details
-            </Button>
-          </ListItem>
-        ))}
-      </List>
+                    View Details
+                  </Button>
+                }
+              >
+                <ListItemText
+                  primary={agreement.name}
+                  secondary={`Amount: $${agreement.amount}`}
+                />
+              </ListItem>
+            ))}
+          </List>
+        </Paper>
+      </Box>
     </Container>
   );
 };
