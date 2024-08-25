@@ -1,19 +1,18 @@
 import React from "react";
-import { Container, Typography, Button } from "@mui/material";
-import { Link } from "react-router-dom";
+import IssueChart from "../components/IssueChart";
+import ProfitChart from "../components/ProfitChart";
+import { Container, Typography } from "@mui/material";
+import IssueRiskChartByAgreement from "../components/IssueRiskChartByAgreement";
 
 const HomePage = () => {
   return (
     <Container>
       <Typography variant="h4" gutterBottom>
-        Welcome to the Application
+        Issue Risk and Profit Analysis
       </Typography>
-      <Typography variant="body1" gutterBottom>
-        This is the homepage. Use the navigation to explore different sections.
-      </Typography>
-      <Button variant="contained" color="primary" component={Link} to="/issues">
-        View Issues
-      </Button>
+      <IssueRiskChartByAgreement />
+      <IssueChart />
+      <ProfitChart />
     </Container>
   );
 };

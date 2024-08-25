@@ -12,6 +12,7 @@ import Navbar from "./components/NavBar";
 import LoginPage from "./pages/LoginPage";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import IssueEditPage from "./pages/IssueEditPage"; // IssueEditPage bileşenini içe aktarın
+import PrivateRoute from "./components/PrivateRoute";
 
 const theme = createTheme({
   palette: {
@@ -30,16 +31,81 @@ const App = () => {
         <div>
           <Navbar />
           <Routes>
-            <Route path="/" element={<HomePage />} />
-            <Route path="/agreements" element={<AgreementsPage />} />
-            <Route path="/agreements/:id" element={<AgreementDetail />} />
-            <Route path="/partners" element={<PartnersPage />} />
-            <Route path="/partners/:id" element={<PartnerDetail />} />
-            <Route path="/issues" element={<IssueListPage />} />
-            <Route path="/issues/create" element={<CreateIssuePage />} />
-            <Route path="/issues/:id" element={<IssueDetailPage />} />
-            <Route path="/issues/:id/edit" element={<IssueEditPage />} />
             <Route path="/login" element={<LoginPage />} />
+
+            {/* Private routes */}
+            <Route
+              path="/"
+              element={
+                <PrivateRoute>
+                  <HomePage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/agreements"
+              element={
+                <PrivateRoute>
+                  <AgreementsPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/agreements/:id"
+              element={
+                <PrivateRoute>
+                  <AgreementDetail />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/partners"
+              element={
+                <PrivateRoute>
+                  <PartnersPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/partners/:id"
+              element={
+                <PrivateRoute>
+                  <PartnerDetail />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/issues"
+              element={
+                <PrivateRoute>
+                  <IssueListPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/issues/create"
+              element={
+                <PrivateRoute>
+                  <CreateIssuePage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/issues/:id"
+              element={
+                <PrivateRoute>
+                  <IssueDetailPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/issues/:id/edit"
+              element={
+                <PrivateRoute>
+                  <IssueEditPage />
+                </PrivateRoute>
+              }
+            />
           </Routes>
         </div>
       </Router>

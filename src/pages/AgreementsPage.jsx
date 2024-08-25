@@ -12,7 +12,7 @@ import { Link as RouterLink } from "react-router-dom";
 
 const AgreementsPage = () => {
   const [agreements, setAgreements] = useState([]);
-
+  console.log("agreements", agreements);
   useEffect(() => {
     ApiService.get("/agreements")
       .then((response) => setAgreements(response.data))
