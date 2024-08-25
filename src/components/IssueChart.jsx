@@ -19,16 +19,24 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  TextField,
+  Autocomplete,
 } from "@mui/material";
 
 const IssueChart = () => {
   const [issues, setIssues] = useState([]);
   const [numIssues, setNumIssues] = useState(10);
+  const [keywordFilter, setKeywordFilter] = useState("");
+  const [filteredKeywords, setFilteredKeywords] = useState([]);
 
   useEffect(() => {
     ApiService.get("/issues")
       .then((response) => {
         setIssues(response.data);
+        const keywords = response.data.flatMap((issue) =>
+          issue.keywords.split(",")
+        );
+        setFilteredKeywords([...new Set(keywords)]);
       })
       .catch((error) => console.error("Error fetching issues:", error));
   }, []);
@@ -37,7 +45,15 @@ const IssueChart = () => {
     setNumIssues(event.target.value);
   };
 
-  const displayedIssues = issues.slice(-numIssues);
+  const handleKeywordChange = (event, value) => {
+    setKeywordFilter(value);
+  };
+
+  const displayedIssues = issues
+    .slice(-numIssues)
+    .filter(
+      (issue) => !keywordFilter || issue.keywords.includes(keywordFilter)
+    );
 
   return (
     <Container>
@@ -59,24 +75,44 @@ const IssueChart = () => {
               <MenuItem value={issues.length}>All Issues</MenuItem>
             </Select>
           </FormControl>
+          <Autocomplete
+            options={filteredKeywords}
+            value={keywordFilter}
+            onChange={handleKeywordChange}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Filter by Keyword"
+                margin="normal"
+              />
+            )}
+            freeSolo
+          />
           <ResponsiveContainer width="100%" height={400}>
             <LineChart data={displayedIssues}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="title" />
-              <YAxis />
+              <YAxis yAxisId="left" domain={["auto", "auto"]} />
+              <YAxis yAxisId="right" orientation="right" domain={[0, 3]} />
               <Tooltip />
               <Legend />
               <Line
+                yAxisId="right"
                 type="monotone"
                 dataKey="riskLevel"
-                stroke="#8884d8"
-                activeDot={{ r: 8 }}
+                stroke="#ff7300"
               />
-              <Line type="monotone" dataKey="cost" stroke="#82ca9d" />
               <Line
+                yAxisId="left"
+                type="monotone"
+                dataKey="cost"
+                stroke="#82ca9d"
+              />
+              <Line
+                yAxisId="left"
                 type="monotone"
                 dataKey="agreementAmount"
-                stroke="#ffc658"
+                stroke="#8884d8"
               />
             </LineChart>
           </ResponsiveContainer>

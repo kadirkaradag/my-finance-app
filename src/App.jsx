@@ -13,6 +13,7 @@ import LoginPage from "./pages/LoginPage";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
 import IssueEditPage from "./pages/IssueEditPage"; // IssueEditPage bileşenini içe aktarın
 import PrivateRoute from "./components/PrivateRoute";
+import AgreementEditPage from "./pages/AgreementEditPage";
 
 const theme = createTheme({
   palette: {
@@ -103,6 +104,14 @@ const App = () => {
               element={
                 <PrivateRoute>
                   <IssueEditPage />
+                </PrivateRoute>
+              }
+            />
+            <Route
+              path="/agreements/edit/:id"
+              element={
+                <PrivateRoute>
+                  <AgreementEditPage />
                 </PrivateRoute>
               }
             />

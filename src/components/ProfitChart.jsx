@@ -19,16 +19,24 @@ import {
   InputLabel,
   Select,
   MenuItem,
+  TextField,
+  Autocomplete,
 } from "@mui/material";
 
 const ProfitChart = () => {
   const [issues, setIssues] = useState([]);
   const [numIssues, setNumIssues] = useState(10);
+  const [keywordFilter, setKeywordFilter] = useState("");
+  const [filteredKeywords, setFilteredKeywords] = useState([]);
 
   useEffect(() => {
     ApiService.get("/issues")
       .then((response) => {
         setIssues(response.data);
+        const keywords = response.data.flatMap((issue) =>
+          issue.keywords.split(",")
+        );
+        setFilteredKeywords([...new Set(keywords)]); // Tekrarlanan kelimeleri kaldır
       })
       .catch((error) => console.error("Error fetching issues:", error));
   }, []);
@@ -37,14 +45,19 @@ const ProfitChart = () => {
     setNumIssues(event.target.value);
   };
 
-  const displayedIssues = issues.slice(-numIssues);
+  const handleKeywordChange = (event, value) => {
+    setKeywordFilter(value);
+  };
 
   const calculateProfit = (issue) => issue.agreementAmount - issue.cost;
 
-  const processedIssues = displayedIssues.map((issue) => ({
-    ...issue,
-    profit: calculateProfit(issue),
-  }));
+  const displayedIssues = issues
+    .slice(-numIssues)
+    .filter((issue) => !keywordFilter || issue.keywords.includes(keywordFilter))
+    .map((issue) => ({
+      ...issue,
+      profit: calculateProfit(issue),
+    }));
 
   return (
     <Container>
@@ -66,8 +79,21 @@ const ProfitChart = () => {
               <MenuItem value={issues.length}>All Issues</MenuItem>
             </Select>
           </FormControl>
+          <Autocomplete
+            options={filteredKeywords}
+            value={keywordFilter}
+            onChange={handleKeywordChange}
+            renderInput={(params) => (
+              <TextField
+                {...params}
+                label="Filter by Keyword"
+                margin="normal"
+              />
+            )}
+            freeSolo
+          />
           <ResponsiveContainer width="100%" height={400}>
-            <BarChart data={processedIssues}>
+            <BarChart data={displayedIssues}>
               <CartesianGrid strokeDasharray="3 3" />
               <XAxis dataKey="title" />
               <YAxis />

@@ -1,7 +1,17 @@
 import React, { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import ApiService from "../services/ApiService";
-import { Container, Typography, TextField, Button, Grid } from "@mui/material";
+import {
+  Container,
+  Typography,
+  TextField,
+  Button,
+  Grid,
+  Box,
+  Paper,
+  CircularProgress,
+  Alert,
+} from "@mui/material";
 
 const IssueEditPage = () => {
   const { id } = useParams();
@@ -12,15 +22,20 @@ const IssueEditPage = () => {
     cost: "",
     agreementAmount: "",
   });
+  const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
     ApiService.get(`/issues/${id}`)
-      .then((response) => setIssue(response.data))
+      .then((response) => {
+        setIssue(response.data);
+        setLoading(false);
+      })
       .catch((error) => {
         console.error("Error fetching issue:", error);
         setError("Failed to load issue data.");
+        setLoading(false);
       });
   }, [id]);
 
@@ -39,72 +54,102 @@ const IssueEditPage = () => {
       .catch((error) => setError("Failed to update issue: " + error.message));
   };
 
+  if (loading) {
+    return (
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        <CircularProgress />
+      </Box>
+    );
+  }
+
   return (
     <Container maxWidth="sm">
-      <Typography variant="h4" gutterBottom>
-        Edit Issue
-      </Typography>
-      {error && <Typography color="error">{error}</Typography>}
-      <form onSubmit={handleSubmit}>
-        <TextField
-          label="Title"
-          name="title"
-          value={issue.title}
-          onChange={handleChange}
-          fullWidth
-          required
-          margin="normal"
-        />
-        <TextField
-          label="Description"
-          name="description"
-          value={issue.description}
-          onChange={handleChange}
-          fullWidth
-          required
-          margin="normal"
-          multiline
-          rows={4}
-        />
-        <TextField
-          label="Keywords (comma-separated)"
-          name="keywords"
-          value={issue.keywords}
-          onChange={handleChange}
-          fullWidth
-          required
-          margin="normal"
-        />
-        <Grid container spacing={2}>
-          <Grid item xs={6}>
+      <Box my={4}>
+        <Paper elevation={3} sx={{ padding: 3 }}>
+          <Typography variant="h4" gutterBottom>
+            Edit Issue
+          </Typography>
+          {error && <Alert severity="error">{error}</Alert>}
+          <form onSubmit={handleSubmit}>
             <TextField
-              label="Cost"
-              name="cost"
-              value={issue.cost}
+              label="Title"
+              name="title"
+              value={issue.title}
               onChange={handleChange}
               fullWidth
               required
               margin="normal"
-              type="number"
+              variant="outlined"
             />
-          </Grid>
-          <Grid item xs={6}>
             <TextField
-              label="Agreement Amount"
-              name="agreementAmount"
-              value={issue.agreementAmount}
+              label="Description"
+              name="description"
+              value={issue.description}
               onChange={handleChange}
               fullWidth
               required
               margin="normal"
-              type="number"
+              multiline
+              rows={4}
+              variant="outlined"
             />
-          </Grid>
-        </Grid>
-        <Button type="submit" variant="contained" color="primary" fullWidth>
-          Update Issue
-        </Button>
-      </form>
+            <TextField
+              label="Keywords (comma-separated)"
+              name="keywords"
+              value={issue.keywords}
+              onChange={handleChange}
+              fullWidth
+              required
+              margin="normal"
+              variant="outlined"
+            />
+            <Grid container spacing={2}>
+              <Grid item xs={6}>
+                <TextField
+                  label="Cost"
+                  name="cost"
+                  value={issue.cost}
+                  onChange={handleChange}
+                  fullWidth
+                  required
+                  margin="normal"
+                  type="number"
+                  variant="outlined"
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <TextField
+                  label="Agreement Amount"
+                  name="agreementAmount"
+                  value={issue.agreementAmount}
+                  onChange={handleChange}
+                  fullWidth
+                  required
+                  margin="normal"
+                  type="number"
+                  variant="outlined"
+                />
+              </Grid>
+            </Grid>
+            <Box mt={3}>
+              <Button
+                type="submit"
+                variant="contained"
+                color="primary"
+                fullWidth
+                sx={{ padding: "10px 0" }}
+              >
+                Update Issue
+              </Button>
+            </Box>
+          </form>
+        </Paper>
+      </Box>
     </Container>
   );
 };
