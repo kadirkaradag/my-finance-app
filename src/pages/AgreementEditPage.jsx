@@ -15,7 +15,6 @@ const AgreementEditPage = () => {
   });
 
   useEffect(() => {
-    // Anlaşma detaylarını yüklemek için API isteği
     ApiService.get(`/agreements/${id}`)
       .then((response) => {
         setAgreement(response.data);
@@ -32,7 +31,6 @@ const AgreementEditPage = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Anlaşma düzenlemesi için API isteği
     ApiService.put(`/agreements/${id}`, agreement)
       .then(() => {
         navigate("/agreements");

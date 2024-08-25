@@ -22,7 +22,6 @@ const AgreementDetail = () => {
 
   if (loading) return <Typography>Loading...</Typography>;
 
-  // Eğer agreement null ise veya issues undefined ise bir kontrol ekleyelim
   if (!agreement || !agreement.issues) {
     return <Typography>No issues available for this agreement.</Typography>;
   }

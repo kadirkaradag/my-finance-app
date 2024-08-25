@@ -38,7 +38,6 @@ const Navbar = () => {
   return (
     <AppBar position="static">
       <Toolbar>
-        {/* Ortalanmış menü butonları */}
         <Box sx={{ flexGrow: 1, display: "flex", justifyContent: "center" }}>
           <Button color="inherit" component={RouterLink} to="/">
             Home
@@ -53,7 +52,6 @@ const Navbar = () => {
             Issues
           </Button>
         </Box>
-        {/* Sağda yer alan login/logout butonu */}
         {isAuthenticated ? (
           <Button color="inherit" onClick={handleLogoutClick}>
             Logout
@@ -65,7 +63,6 @@ const Navbar = () => {
         )}
       </Toolbar>
 
-      {/* Logout Onay Diyaloğu */}
       <Dialog open={open} onClose={handleLogoutCancel}>
         <DialogTitle>Confirm Logout</DialogTitle>
         <DialogContent>

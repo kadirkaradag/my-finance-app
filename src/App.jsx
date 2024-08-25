@@ -11,7 +11,7 @@ import PartnerDetail from "./components/Partners/PartnerDetail";
 import Navbar from "./components/NavBar";
 import LoginPage from "./pages/LoginPage";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import IssueEditPage from "./pages/IssueEditPage"; // IssueEditPage bileşenini içe aktarın
+import IssueEditPage from "./pages/IssueEditPage";
 import PrivateRoute from "./components/PrivateRoute";
 import AgreementEditPage from "./pages/AgreementEditPage";
 
@@ -33,8 +33,6 @@ const App = () => {
           <Navbar />
           <Routes>
             <Route path="/login" element={<LoginPage />} />
-
-            {/* Private routes */}
             <Route
               path="/"
               element={

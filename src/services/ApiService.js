@@ -2,10 +2,10 @@ import axios from "axios";
 import AuthService from "./AuthService";
 
 const ApiService = axios.create({
-  baseURL: "https://localhost:7248/api", // API base URL'ini kendi projenize göre ayarlayın
+  baseURL: "https://localhost:7248/api",
 });
 
-// Request interceptor ile her isteğe otomatik olarak token ekleyin
+// Request interceptor ile her isteğe otomatik olarak token ekleme
 ApiService.interceptors.request.use(
   (config) => {
     const token = AuthService.getToken();

@@ -50,7 +50,7 @@ const IssueEditPage = () => {
     e.preventDefault();
 
     ApiService.put(`/issues/${id}`, issue)
-      .then(() => navigate(`/issues/${id}`)) // Başarılı güncelleme sonrası Issue detay sayfasına yönlendir
+      .then(() => navigate(`/issues/${id}`))
       .catch((error) => setError("Failed to update issue: " + error.message));
   };
 
