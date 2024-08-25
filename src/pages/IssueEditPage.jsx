@@ -1,19 +1,11 @@
 import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import ApiService from "../services/ApiService";
-import { useNavigate } from "react-router-dom";
-import {
-  Container,
-  Typography,
-  TextField,
-  Button,
-  MenuItem,
-  Grid,
-} from "@mui/material";
+import { Container, Typography, TextField, Button, Grid } from "@mui/material";
 
-const CreateIssuePage = () => {
-  const [agreements, setAgreements] = useState([]);
-  const [formData, setFormData] = useState({
-    agreementId: "",
+const IssueEditPage = () => {
+  const { id } = useParams();
+  const [issue, setIssue] = useState({
     title: "",
     description: "",
     keywords: "",
@@ -24,14 +16,17 @@ const CreateIssuePage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    ApiService.get("/agreements")
-      .then((response) => setAgreements(response.data))
-      .catch((error) => console.error("Error fetching agreements:", error));
-  }, []);
+    ApiService.get(`/issues/${id}`)
+      .then((response) => setIssue(response.data))
+      .catch((error) => {
+        console.error("Error fetching issue:", error);
+        setError("Failed to load issue data.");
+      });
+  }, [id]);
 
   const handleChange = (e) => {
-    setFormData({
-      ...formData,
+    setIssue({
+      ...issue,
       [e.target.name]: e.target.value,
     });
   };
@@ -39,41 +34,22 @@ const CreateIssuePage = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
 
-    ApiService.post("/issues", formData)
-      .then(() => navigate("/issues"))
-      .catch((error) => setError("Failed to create issue: " + error.message));
+    ApiService.put(`/issues/${id}`, issue)
+      .then(() => navigate(`/issues/${id}`)) // Başarılı güncelleme sonrası Issue detay sayfasına yönlendir
+      .catch((error) => setError("Failed to update issue: " + error.message));
   };
 
   return (
     <Container maxWidth="sm">
       <Typography variant="h4" gutterBottom>
-        Create New Issue
+        Edit Issue
       </Typography>
       {error && <Typography color="error">{error}</Typography>}
       <form onSubmit={handleSubmit}>
         <TextField
-          select
-          label="Agreement"
-          name="agreementId"
-          value={formData.agreementId}
-          onChange={handleChange}
-          fullWidth
-          required
-          margin="normal"
-        >
-          <MenuItem value="">
-            <em>Select Agreement</em>
-          </MenuItem>
-          {agreements.map((agreement) => (
-            <MenuItem key={agreement.id} value={agreement.id}>
-              {agreement.name}
-            </MenuItem>
-          ))}
-        </TextField>
-        <TextField
           label="Title"
           name="title"
-          value={formData.title}
+          value={issue.title}
           onChange={handleChange}
           fullWidth
           required
@@ -82,7 +58,7 @@ const CreateIssuePage = () => {
         <TextField
           label="Description"
           name="description"
-          value={formData.description}
+          value={issue.description}
           onChange={handleChange}
           fullWidth
           required
@@ -93,7 +69,7 @@ const CreateIssuePage = () => {
         <TextField
           label="Keywords (comma-separated)"
           name="keywords"
-          value={formData.keywords}
+          value={issue.keywords}
           onChange={handleChange}
           fullWidth
           required
@@ -104,7 +80,7 @@ const CreateIssuePage = () => {
             <TextField
               label="Cost"
               name="cost"
-              value={formData.cost}
+              value={issue.cost}
               onChange={handleChange}
               fullWidth
               required
@@ -116,7 +92,7 @@ const CreateIssuePage = () => {
             <TextField
               label="Agreement Amount"
               name="agreementAmount"
-              value={formData.agreementAmount}
+              value={issue.agreementAmount}
               onChange={handleChange}
               fullWidth
               required
@@ -126,11 +102,11 @@ const CreateIssuePage = () => {
           </Grid>
         </Grid>
         <Button type="submit" variant="contained" color="primary" fullWidth>
-          Create Issue
+          Update Issue
         </Button>
       </form>
     </Container>
   );
 };
 
-export default CreateIssuePage;
+export default IssueEditPage;

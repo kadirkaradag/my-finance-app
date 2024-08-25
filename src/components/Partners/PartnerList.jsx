@@ -1,7 +1,16 @@
 import React, { useEffect, useState } from "react";
 import ApiService from "../../services/ApiService";
+import {
+  Container,
+  Typography,
+  List,
+  ListItem,
+  ListItemText,
+  Button,
+} from "@mui/material";
+import { Link } from "react-router-dom";
 
-const PartnersPage = () => {
+const PartnerList = () => {
   const [partners, setPartners] = useState([]);
 
   useEffect(() => {
@@ -11,15 +20,30 @@ const PartnersPage = () => {
   }, []);
 
   return (
-    <div>
-      <h1>Partners</h1>
-      <ul>
+    <Container>
+      <Typography variant="h4" gutterBottom>
+        Partners
+      </Typography>
+      <List>
         {partners.map((partner) => (
-          <li key={partner.id}>{partner.name}</li>
+          <ListItem key={partner.id}>
+            <ListItemText
+              primary={partner.name}
+              secondary={`Contact Info: ${partner.contactInfo}`}
+            />
+            <Button
+              variant="outlined"
+              color="primary"
+              component={Link}
+              to={`/partners/${partner.id}`}
+            >
+              View Details
+            </Button>
+          </ListItem>
         ))}
-      </ul>
-    </div>
+      </List>
+    </Container>
   );
 };
 
-export default PartnersPage;
+export default PartnerList;

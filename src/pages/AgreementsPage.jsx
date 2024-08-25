@@ -1,5 +1,14 @@
 import React, { useEffect, useState } from "react";
 import ApiService from "../services/ApiService";
+import {
+  Container,
+  Typography,
+  List,
+  ListItem,
+  ListItemText,
+  Button,
+} from "@mui/material";
+import { Link as RouterLink } from "react-router-dom";
 
 const AgreementsPage = () => {
   const [agreements, setAgreements] = useState([]);
@@ -11,14 +20,47 @@ const AgreementsPage = () => {
   }, []);
 
   return (
-    <div>
-      <h1>Agreements</h1>
-      <ul>
+    <Container>
+      <Typography variant="h4" gutterBottom>
+        Agreements
+      </Typography>
+      <List>
         {agreements.map((agreement) => (
-          <li key={agreement.id}>{agreement.name}</li>
+          <ListItem key={agreement.id}>
+            <ListItemText
+              primary={agreement.name}
+              secondary={
+                <>
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    color="textPrimary"
+                  >
+                    Amount: {agreement.amount}
+                  </Typography>
+                  <br />
+                  <Typography
+                    component="span"
+                    variant="body2"
+                    color="textSecondary"
+                  >
+                    Cost: {agreement.cost}
+                  </Typography>
+                </>
+              }
+            />
+            <Button
+              variant="outlined"
+              color="primary"
+              component={RouterLink}
+              to={`/agreements/${agreement.id}`} // Doğru URL parametresi
+            >
+              View Details
+            </Button>
+          </ListItem>
         ))}
-      </ul>
-    </div>
+      </List>
+    </Container>
   );
 };
 

@@ -22,6 +22,11 @@ const logout = () => {
   localStorage.removeItem("token");
 };
 
+const isAuthenticated = () => {
+  const token = localStorage.getItem("token"); // Token'ı yerel depolamada kontrol edin
+  return token !== null;
+};
+
 const getToken = () => {
   return localStorage.getItem("token");
 };
@@ -30,6 +35,7 @@ const AuthService = {
   login,
   logout,
   getToken,
+  isAuthenticated,
 };
 
 export default AuthService;

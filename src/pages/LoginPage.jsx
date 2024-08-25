@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import AuthService from "../services/AuthService";
+import { Container, Typography, TextField, Button, Box } from "@mui/material";
 
 const LoginPage = () => {
   const [email, setEmail] = useState("");
@@ -14,38 +15,44 @@ const LoginPage = () => {
 
     try {
       await AuthService.login(email, password);
-      navigate("/"); // Başarılı giriş sonrası ana sayfaya yönlendirin
+      navigate("/");
     } catch (err) {
       setError("Invalid email or password");
     }
   };
 
   return (
-    <div>
-      <h2>Login Page</h2> {/* Test için basit bir metin ekleyin */}
+    <Container maxWidth="sm">
+      <Typography variant="h4" gutterBottom>
+        Login
+      </Typography>
+      {error && <Typography color="error">{error}</Typography>}
       <form onSubmit={handleLogin}>
-        <div>
-          <label>Email:</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Password:</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
-        {error && <p style={{ color: "red" }}>{error}</p>}
-        <button type="submit">Login</button>
+        <TextField
+          label="Email"
+          type="email"
+          fullWidth
+          margin="normal"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+          required
+        />
+        <TextField
+          label="Password"
+          type="password"
+          fullWidth
+          margin="normal"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+          required
+        />
+        <Box mt={2}>
+          <Button type="submit" variant="contained" color="primary" fullWidth>
+            Login
+          </Button>
+        </Box>
       </form>
-    </div>
+    </Container>
   );
 };
 

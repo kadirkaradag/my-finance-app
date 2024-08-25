@@ -1,6 +1,14 @@
 import React, { useEffect, useState } from "react";
-import axios from "axios";
 import ApiService from "../../services/ApiService";
+import {
+  Container,
+  Typography,
+  List,
+  ListItem,
+  ListItemText,
+  Button,
+} from "@mui/material";
+import { Link } from "react-router-dom";
 
 const AgreementList = () => {
   const [agreements, setAgreements] = useState([]);
@@ -12,14 +20,29 @@ const AgreementList = () => {
   }, []);
 
   return (
-    <div>
-      <h1>Agreements</h1>
-      <ul>
+    <Container>
+      <Typography variant="h4" gutterBottom>
+        Agreements
+      </Typography>
+      <List>
         {agreements.map((agreement) => (
-          <li key={agreement.id}>{agreement.name}</li>
+          <ListItem key={agreement.id}>
+            <ListItemText
+              primary={agreement.name}
+              secondary={`Amount: ${agreement.amount}`}
+            />
+            <Button
+              variant="outlined"
+              color="primary"
+              component={Link}
+              to={`/agreements/${agreement.id}`}
+            >
+              View Details
+            </Button>
+          </ListItem>
         ))}
-      </ul>
-    </div>
+      </List>
+    </Container>
   );
 };
 
